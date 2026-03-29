@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    otpExpire:{
+         type: Date,
+         default:()=>{ return Date.now() + (1000 * 60 * 3)}
+    },
     otp:{
         type: String,
         trim: true,
@@ -58,9 +62,7 @@ const userSchema = new mongoose.Schema({
     },
     cardNumber:{
         type: String,
-        default: function() {
-            return cardNumber.slice(0,4).trim() + ' **** **** ' + cardNumber.slice(-4).trim();
-        }
+        trim: true
     },
     username:{
         type: String,
