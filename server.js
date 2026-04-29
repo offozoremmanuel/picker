@@ -1,14 +1,28 @@
 require('dotenv').config();
 const express = require('express');
-const app = express();
-const PORT = process.env.PORT || 4488;
+const expressSession = require('express-session');
+const PORT = process.env.PORT ;
 
 require('./config/database');
 require('./models/user');
-app.use(express.json());
+
 
 const userRouter = require('./routes/userRouter');
+const paymentRouter = require('./routes/payment');
+const {passport} = require('./middleware/passport');
+
+const app = express();
+app.use(express.json());
+app.use(expressSession({
+    secret: 'emmanuel',
+    resave: true,
+    saveUninitialized: true
+}))
+app.use (passport.initialize())
+app.use (passport.session())
+
 app.use( userRouter);
+app.use( paymentRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, World!');
